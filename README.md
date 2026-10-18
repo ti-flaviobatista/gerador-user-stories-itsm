@@ -1,16 +1,15 @@
 # gerador-user-stories-itsm
 ![Interface do Aplicativo](app.png)
 
-IMPORTANTE: este projeto foi desenvolvido com auxílio de LLM - transformer e treinado por IA generativa. 
-Sua tarefa teve escopo resumido a identificar, através de prompts específicos, elementos de código mais eficiente, eficazes e efetivos.
-Todo o raciocínio sobre "o que" e "onde usar" foi proposto e criado por este desenvolvedor e validado pela referida IA.
-
-
 Criei este script em Python para ajudar na minha rotina de estudos de programação. O objetivo do app é bem simples: gerar histórias de usuário (User Stories) e critérios de aceite aleatórios para servir como "desafios" de código. 
 
 A ideia é usar os requisitos gerados pela ferramenta para delimitar o escopo de pequenas features e treinar lógica de programação construindo scripts curtos, sem inventar coisas mirabolantes.
 
 O projeto foi escrito em Python 3.15 e usa Tkinter para a interface gráfica. Também compilei o script para quem quiser rodar direto no Windows sem precisar configurar ambiente.
+
+**NOTA DE TRANSPARÊNCIA**: Este projeto foi desenvolvido com o auxílio de um **LLM** baseado na arquitetura **Transformer** e treinado por **IA generativa**. 
+
+O escopo da IA foi estritamente limitado a identificar, por meio de prompts específicos, elementos de código mais eficientes, eficazes e efetivos para otimizar a implementação. **Todo o raciocínio estrutural sobre "o que" construir e "onde usar" cada componente foi proposto, desenhado e criado por este desenvolvedor**, cabendo à IA o papel exclusivo de validação técnica e refinamento da documentação.
 
 ## Como usar
 
