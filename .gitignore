@@ -1,0 +1,13 @@
+# Pastas geradas pelo PyInstaller (compilação)
+build/
+dist/
+*.spec
+
+# Caches nativos do Python
+__pycache__/
+*.pyc
+
+# Arquivos de configuração de IDEs locais (opcional, mas bom ter)
+.vscode/
+.idea/
+*.swp
