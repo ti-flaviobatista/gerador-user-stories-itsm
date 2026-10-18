@@ -1,4 +1,6 @@
 # gerador-user-stories-itsm
+![Interface do Aplicativo](app.png)
+
 
 Criei este script em Python para ajudar na minha rotina de estudos de programação. O objetivo do app é bem simples: gerar histórias de usuário (User Stories) e critérios de aceite aleatórios para servir como "desafios" de código. 
 
