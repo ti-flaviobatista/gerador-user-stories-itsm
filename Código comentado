@@ -1,0 +1,154 @@
+import random  # Biblioteca nativa usada para fazer sorteios pseudoaleatórios de elementos nas listas.
+import tkinter as tk  # Biblioteca padrão do Python para criação de Interfaces Gráficas de Usuário (GUI).
+from tkinter import messagebox  # Submódulo específico do Tkinter para exibir caixas de alerta/mensagens na tela.
+
+# ==============================================================================
+# 1. DEFININDO ESTRUTURAS DE DADOS (ARRAYS / LISTAS)
+# ==============================================================================
+
+# Listas simples (Unidimensionais): Armazenam coleções ordenadas de strings (textos).
+# Foi usada a estrutura de lista [] porque precisamos de indexação rápida para o sorteio aleatório.
+ATORES = [
+    "Como um Analista de Suporte Júnior",
+    "Como um Gerente de Incidentes (ITIL)",
+    "Como um Cliente do Service Desk",
+    "Como um Administrador de Banco de Dados"
+]
+
+ACOES = [
+    "quero um relatório automatizado que calcule o MTTR (Tempo Médio de Atendimento)",
+    "quero um sistema de alertas que identifique chamados prestes a estourar o SLA",
+    "quero uma ferramenta que classifique automaticamente o impacto e a urgência de um incidente",
+    "quero um script que identifique chamados duplicados abertos pelo mesmo usuário em menos de 1 hora"
+]
+
+BENEFICIOS = [
+    "para que a equipe possa focar nos gargalos de atendimento e melhorar a eficiência.",
+    "para evitar penalidades contratuais e garantir a satisfação do cliente.",
+    "para que a triagem inicial seja feita sem intervenção humana manual.",
+    "para evitar o retrabalho dos técnicos e manter a base de dados limpa."
+]
+
+# Matriz Multidimensional (Lista de listas):
+# Cada elemento dentro desta lista é, por si só, uma outra lista contendo sub-elementos (strings).
+# Por que usamos isso? Para criar um vínculo lógico. A primeira sub-lista corresponde à primeira Ação, 
+# a segunda sub-lista à segunda Ação, e assim por diante. Isso garante coerência nos critérios de aceite.
+REGRAS_DE_NEGOCIO = [
+    [
+        "Regra 1: O cálculo do tempo deve desconsiderar horários fora do expediente (finais de semana e feriados).",
+        "Regra 2: O resultado final deve ser exportado em formato JSON ou CSV.",
+        "Regra 3: Se o MTTR estiver acima de 4 horas, o relatório deve destacar o indicador em vermelho."
+    ],
+    [
+        "Regra 1: O alerta deve ser gerado quando o chamado atingir 80% do tempo limite do SLA.",
+        "Regra 2: Chamados de prioridade Crítica devem disparar o alerta imediatamente se não forem atribuídos em 15 minutos.",
+        "Regra 3: O log de alertas deve registrar a data, hora e o ID do chamado afetado."
+    ],
+    [
+        "Regra 1: A matriz de prioridade deve cruzar Impacto (Alto/Médio/Baixo) e Urgência (Alta/Média/Baixa) conforme o padrão ITIL.",
+        "Regra 2: Se o ator for da diretoria da empresa, o impacto deve ser automaticamente elevado para Alto."
+    ]
+]
+
+
+# ==============================================================================
+# 2. FUNÇÕES DE LÓGICA E COMPORTAMENTO (ALGORITMOS)
+# ==============================================================================
+
+def gerar_user_story():
+    """
+    Função responsável por sortear os elementos, estruturar o texto da User Story
+    e atualizar a área de exibição da interface gráfica.
+    """
+    # random.randint(0, limite): Sorteia um número inteiro entre o intervalo determinado.
+    # Usamos len(ACOES) - 1 para descobrir dinamicamente o último índice válido da lista de ações.
+    # Guardamos o índice em uma variável porque precisamos dele para buscar a regra de negócio equivalente.
+    indice_acao = random.randint(0, len(ACOES) - 1)
+    
+    # random.choice(lista): Seleciona um elemento aleatório direto da lista informada.
+    # Usado aqui porque o Ator e o Benefício podem ser completamente aleatórios e independentes.
+    ator = random.choice(ATORES)
+    acao = ACOES[indice_acao]
+    beneficio = random.choice(BENEFICIOS)
+    
+    # Tratamento de erro/Filtro de segurança:
+    # A função min() compara dois números e devolve o menor. Como a lista REGRAS_DE_NEGOCIO possui
+    # 3 sub-listas e a lista de ACOES possui 4 itens, se o índice sorteado for 3, o programa quebraria (IndexError).
+    # Usando min(), se o índice for maior que o tamanho da matriz, ele trava estaticamente no último índice válido.
+    regras_idx = min(indice_acao, len(REGRAS_DE_NEGOCIO) - 1)
+    regras = REGRAS_DE_NEGOCIO[regras_idx]
+    
+    # Concatenação e Formatação de Strings:
+    # O caractere '\n' quebra a linha no bloco de texto. 
+    texto_story = f"{ator}\n{acao}\n{beneficio}\n\nCritérios de Aceite / Regras de Negócio:\n"
+    
+    # Laço de repetição (Loop FOR):
+    # Percorre cada string existente dentro da sub-lista de regras selecionada e adiciona um hífen antes dela.
+    for regra in regras:
+        texto_story += f"- {regra}\n"
+        
+    # Manipulação do Componente de Texto do Tkinter:
+    # .delete("1.0", tk.END): Limpa o campo do primeiro caractere ("1.0") até o fim (tk.END).
+    # .insert(tk.END, texto): Insere a nova string formatada no final do componente.
+    txt_resultado.delete("1.0", tk.END)
+    txt_resultado.insert(tk.END, texto_story)
+
+
+def copiar_texto():
+    """
+    Função que interage com a área de transferência do Sistema Operacional.
+    """
+    # .get("1.0", tk.END): Captura tudo que está escrito no componente de texto da tela.
+    # .strip(): Remove espaços em branco desnecessários antes do início ou após o fim do texto.
+    conteudo = txt_resultado.get("1.0", tk.END).strip()
+    
+    # Estrutura Condicional (IF/ELSE): Verifica se a variável contém texto ou está vazia.
+    if conteudo:
+        janela.clipboard_clear()  # Limpa a área de transferência do Windows/Linux/Mac.
+        janela.clipboard_append(conteudo)  # Injeta o texto capturado na memória do sistema (Ctrl+C virtual).
+        # Exibe um pop-up de sucesso na tela para dar feedback visual ao usuário.
+        messagebox.showinfo("Sucesso", "História de Usuário copiada!")
+    else:
+        # Alerta o usuário caso ele clique em copiar com o campo totalmente vazio.
+        messagebox.showwarning("Aviso", "Gere uma história antes de copiar.")
+
+
+# ==============================================================================
+# 3. INTERFACE GRÁFICA DE USUÁRIO (GUI) COM TKINTER
+# ==============================================================================
+
+# Instanciação do Objeto Principal: Cria a janela raiz do programa.
+janela = tk.Tk()
+janela.title("Gerador de User Stories - ITSM") # Define o texto da barra de título da janela.
+janela.geometry("600x450") # Define a largura (600px) e altura (450px) iniciais da tela.
+janela.configure(padx=15, pady=15) # Aplica um espaçamento interno (margem) nas bordas da janela.
+
+# Widget Label (Rótulo): Usado apenas para exibir textos estáticos na tela.
+lbl_titulo = tk.Label(janela, text="Gerador Randômico de User Stories", font=("Helvetica", 14, "bold"))
+# .pack(): Gerenciador de layout do Tkinter. Posiciona o elemento de cima para baixo na tela.
+# pady=(0, 15): Adiciona 15 pixels de espaçamento apenas na parte inferior do elemento.
+lbl_titulo.pack(pady=(0, 15))
+
+# Widget Text (Caixa de Texto Multi-linha): Permite exibir ou editar blocos longos de texto.
+# wrap=tk.WORD: Quebra as linhas automaticamente no final da janela sem cortar palavras ao meio.
+txt_resultado = tk.Text(janela, wrap=tk.WORD, font=("Consolas", 11), height=14)
+# fill=tk.BOTH, expand=True: Faz a caixa de texto esticar e acompanhar o tamanho da janela se o usuário redimensioná-la.
+txt_resultado.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+
+# Widget Frame (Contêiner): Uma caixa invisível usada exclusivamente para agrupar outros componentes.
+# Usamos este frame para conseguir colocar os botões de ação lado a lado na horizontal.
+frame_botoes = tk.Frame(janela)
+frame_botoes.pack()
+
+# Widgets Button (Botões): Componentes clicáveis.
+# O parâmetro 'command=' associa o clique do botão à respectiva função em Python (sem usar os parênteses da função).
+btn_gerar = tk.Button(frame_botoes, text="Gerar Nova Story", font=("Helvetica", 11, "bold"), bg="#2ecc71", fg="white", padx=10, pady=5, command=gerar_user_story)
+# side=tk.LEFT: Alinha o botão à esquerda dentro do contêiner Frame, permitindo o posicionamento horizontal.
+btn_gerar.pack(side=tk.LEFT, padx=10)
+
+btn_copiar = tk.Button(frame_botoes, text="Copiar Texto", font=("Helvetica", 11), bg="#3498db", fg="white", padx=10, pady=5, command=copiar_texto)
+btn_copiar.pack(side=tk.LEFT, padx=10)
+
+# Método de Loop Principal: Mantém a janela aberta escutando cliques, movimentos do mouse e eventos.
+# Sem essa linha, o script executa tudo em milissegundos e fecha a janela imediatamente.
+janela.mainloop()
