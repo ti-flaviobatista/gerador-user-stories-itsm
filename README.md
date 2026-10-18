@@ -1,6 +1,10 @@
 # gerador-user-stories-itsm
 ![Interface do Aplicativo](app.png)
 
+IMPORTANTE: este projeto foi desenvolvido com auxílio de LLM - transformer e treinado por IA generativa. 
+Sua tarefa teve escopo resumido a identificar, através de prompts específicos, elementos de código mais eficiente, eficazes e efetivos.
+Todo o raciocínio sobre "o que" e "onde usar" foi proposto e criado por este desenvolvedor e validado pela referida IA.
+
 
 Criei este script em Python para ajudar na minha rotina de estudos de programação. O objetivo do app é bem simples: gerar histórias de usuário (User Stories) e critérios de aceite aleatórios para servir como "desafios" de código. 
 
